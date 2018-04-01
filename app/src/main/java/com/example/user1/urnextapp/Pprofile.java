@@ -54,12 +54,12 @@ public class Pprofile extends Fragment {
         cancel=(Button) PageTree.findViewById(R.id.cancel);
         name =(TextView) PageTree.findViewById(R.id.patientName);
         arrival =(TextView) PageTree.findViewById(R.id.arrivelTime);
-      // String id=user.getUid();
+       String id=user.getUid();
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
        arrival.setText(today.format("%k:%M:%S"));
         // Read from the database
-        /*Patient.child("Name").child(id).addValueEventListener(new ValueEventListener() {
+        Patient.child("Name").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -85,7 +85,7 @@ public class Pprofile extends Fragment {
                 Intent intent = new Intent(getActivity(), WelcomePage.class);
                 startActivity(intent);
             }
-        });*/
+        });
         return PageTree;
     }
 }

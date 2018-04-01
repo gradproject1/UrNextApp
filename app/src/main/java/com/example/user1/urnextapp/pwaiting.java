@@ -1,11 +1,9 @@
 package com.example.user1.urnextapp;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +11,14 @@ import android.view.ViewGroup;
 public class pwaiting extends Fragment {
 
     //Constructor default
-    public pwaiting() {
-    }
-
-    ;
+    public pwaiting(){};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View PageOne = inflater.inflate(R.layout.fragment_pwaiting, container, false);
 
+
+
         return PageOne;
     }
 }
-

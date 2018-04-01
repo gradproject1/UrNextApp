@@ -26,7 +26,7 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nurse);
-       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         MyTabs = (TabLayout)findViewById(R.id.MyTabs);
@@ -38,13 +38,13 @@ public class Admin extends AppCompatActivity {
 
     }
 
-   public void SetUpViewPager (ViewPager viewpage){
+    public void SetUpViewPager (ViewPager viewpage){
         Admin.MyViewPageAdapter Adapter = new Admin.MyViewPageAdapter(getSupportFragmentManager());
 
 
         Adapter.AddFragmentPage(new addDN(), "Add Page");
         Adapter.AddFragmentPage(new deleteDN(), "Delete Page");
-
+        Adapter.AddFragmentPage(new NDprofile(), "Profile Page");
 
         //We Need Fragment class now
 

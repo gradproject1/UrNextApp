@@ -31,7 +31,7 @@ public class PSignUpPage extends AppCompatActivity {
     private FirebaseAuth auth;
     private   FirebaseDatabase database = FirebaseDatabase.getInstance();
     private   DatabaseReference Patient = database.getReference("Patient");
-   // DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +114,6 @@ public class PSignUpPage extends AppCompatActivity {
                                     Patient.child("email").child(uid).setValue(email);
                                     Patient.child("Password").child(uid).setValue(password);
                                     Patient.child("DOB").child(uid).setValue(DOB1);
-
 
                                     startActivity(new Intent(PSignUpPage.this, Patient.class));
                                     finish();
