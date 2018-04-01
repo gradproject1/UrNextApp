@@ -12,6 +12,7 @@ import android.widget.Toast;
 //fire base
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
@@ -21,18 +22,23 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignInPage extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
-    DatabaseReference databaseReference ;
+    DatabaseReference databaseReference;
     FirebaseAuth.AuthStateListener mAuthListener;
 
+    private FirebaseFirestore fire_store; //to store token id in his document
     EditText inputEmail;
     EditText inputPassword;
     Button sign_in;
     TextView sign_up;
     TextView forgotPassword;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +53,13 @@ public class SignInPage extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        fire_store= FirebaseFirestore.getInstance(); //fire store instance
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
 
+                FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
                 } else {
@@ -64,14 +71,17 @@ public class SignInPage extends AppCompatActivity {
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final String e = inputEmail.getText().toString();
                 final String p = inputPassword.getText().toString();
+
                 // pattern for validate the email format
-                final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                final String emailAdminPattern = "[HAE]+[0-9]+@[a-z]+\\.+[a-z]+"; //admin email format
-                final String emailDoctorPattern = "[HDE]+[0-9]+@[a-z]+\\.+[a-z]+"; //doctor email format
-                final String emailNursePattern = "[HNE]+[0-9]+@[a-z]+\\.+[a-z]+"; //nurse email format
-// check if email not empty and check email format
+                final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[com]+";
+                final String emailAdminPattern = "[HAE]+[0-9]+@[a-z]+\\.+[com]+"; //admin email format
+                final String emailDoctorPattern = "[HDE]+[0-9]+@[a-z]+\\.+[com]+"; //doctor email format
+                final String emailNursePattern = "[HNE]+[0-9]+@[a-z]+\\.+[com]+"; //nurse email format
+
+                // check if email not empty and check email format
                 if (e.isEmpty()) {
                     inputEmail.setError("Please enter your email");
                 }
@@ -81,18 +91,34 @@ public class SignInPage extends AppCompatActivity {
                 else if (p.isEmpty()) {
                     inputPassword.setError("Please enter your password");
                 }
-                else if (p.length()<9) {
+                else if (p.length()<6) {
                     inputPassword.setError("Password must to be more than 9 characters");
                 }
+
                 else { //start sign in
                     firebaseAuth.signInWithEmailAndPassword(e, p).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+
                             if (task.isSuccessful()) {
+
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                // get user token id so, we can send to him a notification
+                                        String Token_ID= FirebaseInstanceId.getInstance().getToken();
+                                        Map<String,Object> token_map= new HashMap<>();
+                                        token_map.put("Token_ID", Token_ID);
+                                        fire_store.collection("Usres").document(uid).update(token_map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        });
+
                           // if user verify his email allow him to login else send email for verification
-                                if(user.isEmailVerified()){
+                               // if(user.isEmailVerified()){
+
                                 //depend on email format open specific page
                                      if(e.matches(emailAdminPattern)){
                                          Intent i = new Intent(SignInPage.this, Admin.class);
@@ -110,12 +136,14 @@ public class SignInPage extends AppCompatActivity {
                                          Intent i = new Intent(SignInPage.this, Patient.class);
                                          startActivity(i);
                                      }
-                                }
-                                else if (!user.isEmailVerified()) {
-                                     Toast.makeText(SignInPage.this, "Please confirm your email", Toast.LENGTH_SHORT).show();
-                                     user.sendEmailVerification();
-                                 }
+                                //}
+
+                               // else if (!user.isEmailVerified()) {
+                                 //    Toast.makeText(SignInPage.this, "Please confirm your email", Toast.LENGTH_SHORT).show();
+                                //     user.sendEmailVerification();
+                               //  }
                             }
+
                             if (!task.isSuccessful()) {
 
                             }
@@ -155,3 +183,14 @@ public class SignInPage extends AppCompatActivity {
         });
     }
 }
+/* logout
+   Map<String,Object> token_remove= new HashMap<>();
+    token_remove.put("Token_ID", FieldValue.delete());
+    //because when field in firebase all become null the key will deleted so we use this method
+     fire_store.collection("Usres").document(uid).update(token_remove).addOnSuccessListener(new OnSuccessListener<Void>() {
+   @Override
+   public void onSuccess(Void aVoid) {
+
+        }
+      });
+ */

@@ -26,7 +26,7 @@ public class Doctor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nurse);
+       /* setContentView(R.layout.activity_nurse);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -34,12 +34,12 @@ public class Doctor extends AppCompatActivity {
         MyPage = (ViewPager)findViewById(R.id.MyPage);
 
         MyTabs.setupWithViewPager(MyPage);
-        SetUpViewPager(MyPage);
+        SetUpViewPager(MyPage);*/
 
 
     }
 
-    public void SetUpViewPager (ViewPager viewpage){
+  /*  public void SetUpViewPager (ViewPager viewpage){
         Doctor.MyViewPageAdapter Adapter = new Doctor.MyViewPageAdapter(getSupportFragmentManager());
 
 
@@ -102,5 +102,5 @@ public class Doctor extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

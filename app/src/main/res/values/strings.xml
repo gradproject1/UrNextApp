@@ -130,4 +130,7 @@
     <string name="title_activity_admin">Admin</string>
     <string name="title_activity_nurse">Nurse</string>
     <string name="title_activity_doctor">Doctor</string>
+    <string name="estimated_time">Estimated time:</string>
+    <string name="default_notification_channel_id">Tvac_CH_01</string>
+
 </resources>
